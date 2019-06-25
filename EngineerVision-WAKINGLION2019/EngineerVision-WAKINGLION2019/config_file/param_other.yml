@@ -1,0 +1,25 @@
+%YAML:1.0
+---
+main_mode: 0
+enemy_color: 0
+debug-b_show_src: 1
+debug-b_show_bin: 0
+debug-b_show_target: 0
+debug-b_show_armor: 0
+debug-b_show_result: 0
+debug-b_show_fps: 1
+debug-b_save_result: 1
+debug-n_save_result: 167
+debug-b_save_pic: 0
+debug-f_save_pic_inter: 2389
+debug-expore_time: 100000
+cp-x: 0.
+cp-y: 5.1399999999999997e+00
+cp-z: 1.8850000000000001e+01
+cp-y_offset: 0.
+cp-bullet_speed: 2.6160000000000000e+01
+port_param-dev_name: /dev/ttyUSB0
+port_param-baud_rate: 115200
+port_param-databits: 8
+port_param-stopbits: 1
+port_param-parity: 110

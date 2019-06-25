@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Exec=/home/rm/rm2019/test/Iproject-insfantry/debug/Iproject-insfantry
+Terminal=true
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Name[zh_CN]=rm2019
+Name=rm2019
+Comment[zh_CN]=debug
+Comment=debug

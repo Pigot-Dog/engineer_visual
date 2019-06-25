@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Exec=/home/rm/rm2019/InfantryVision-WAKINGLION2019/InfantryVision-WAKINGLION2019/release/InfantryVision-WARKINGLION2019
+Terminal=true
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Name[zh_CN]=rm2019
+Name=rm2019
+Comment[zh_CN]=release
+Comment=release
