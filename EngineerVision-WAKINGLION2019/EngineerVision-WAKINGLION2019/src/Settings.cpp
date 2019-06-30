@@ -16,7 +16,7 @@ void MainSettings::setMainParam(const char *win_name)
     cv::createTrackbar("debug-b_show_src",win_name,&debug.b_show_src, 1);
     cv::createTrackbar("debug-b_show_bin",win_name,&debug.b_show_bin, 1);
     cv::createTrackbar("debug-b_show_target",win_name,&debug.b_show_target, 1);
-    cv::createTrackbar("debug-b_show_armor",win_name,&debug.b_show_armor, 1);
+    cv::createTrackbar("debug-b_show_armor",win_name,&debug.    b_show_armor, 1);
     cv::createTrackbar("debug-b_show_result",win_name,&debug.b_show_result, 1);
     cv::createTrackbar("debug-b_show_fps",win_name,&debug.b_show_fps, 1);
     cv::createTrackbar("debug-b_save_result",win_name,&debug.b_save_result, 1);
@@ -107,8 +107,8 @@ Settings::Settings()
 void Settings::setPreprocessParam(const char *win_name)
 {
     cv::namedWindow(win_name);
-    cv::createTrackbar("gray_thre_min",win_name,&preprocess_param.gray_thre_min, 255);
-    cv::createTrackbar("gray_thre_max",win_name,&preprocess_param.gray_thre_max, 255);
+    cv::createTrackbar("gray_thre_min",win_name,&preprocess_param.gray_thre_min, 255);  //灰度图二值化最小阈值
+    cv::createTrackbar("gray_thre_max",win_name,&preprocess_param.gray_thre_max, 255);  //灰度图二值化最大阈值
 
     cv::createTrackbar("gray_max_w",win_name,&preprocess_param.gray_max_w, 10);
     cv::createTrackbar("gray_avg_w",win_name,&preprocess_param.gray_avg_w, 10);
@@ -119,12 +119,19 @@ void Settings::setTgtSizeParam(const char *win_name,
 {
     cv::namedWindow(win_name);
 
+//    cv::createTrackbar("hough_circle_param1",win_name,&tgt_size_param.hough_circle_param1, 1000);
+//    cv::createTrackbar("hough_circle_param2",win_name,&tgt_size_param.hough_circle_param2, 500);
+//    cv::createTrackbar("hough_circle_minradius",win_name,&tgt_size_param.hough_circle_minradiu, 100);
+
     cv::createTrackbar("len_min",win_name,&tgt_size_param.len_min, 200);
     cv::createTrackbar("len_max",win_name,&tgt_size_param.len_max, 10000);
     cv::createTrackbar("radio_min",win_name,&tgt_size_param.radio_min, 20);
     cv::createTrackbar("radio_max",win_name,&tgt_size_param.radio_max, 20);
     cv::createTrackbar("area_min",win_name,&tgt_size_param.area_min, 10000);
     cv::createTrackbar("area_max",win_name,&tgt_size_param.area_max, 1000000);
+
+    cv::createTrackbar("area_ratio_max",win_name,&tgt_size_param.area_ratio_max, 5000);
+    cv::createTrackbar("len_ratio_max",win_name,&tgt_size_param.len_ratio_max, 5000);
 
     static int area_radio_min=tgt_size_param.area_radio_min*100000;
     cv::createTrackbar("area_radio_min",win_name,&area_radio_min, 100000);
@@ -151,12 +158,19 @@ void Settings::setTgtSizeParam(const char *win_name)
 {
     cv::namedWindow(win_name);
 
-    cv::createTrackbar("len_min",win_name,&tgt_size_param.len_min, 200);
-    cv::createTrackbar("len_max",win_name,&tgt_size_param.len_max, 1000);
+//    cv::createTrackbar("hough_circle_param1",win_name,&tgt_size_param.hough_circle_param1, 1000);
+//    cv::createTrackbar("hough_circle_param2",win_name,&tgt_size_param.hough_circle_param2, 500);
+//    cv::createTrackbar("hough_circle_minradius",win_name,&tgt_size_param.hough_circle_minradiu, 100);
+
+    cv::createTrackbar("len_min",win_name,&tgt_size_param.len_min, 5000);
+    cv::createTrackbar("len_max",win_name,&tgt_size_param.len_max, 10000);
     cv::createTrackbar("radio_min",win_name,&tgt_size_param.radio_min, 20);
     cv::createTrackbar("radio_max",win_name,&tgt_size_param.radio_max, 20);
-    cv::createTrackbar("area_min",win_name,&tgt_size_param.area_min, 1000);
-    cv::createTrackbar("area_max",win_name,&tgt_size_param.area_max, 10000);
+    cv::createTrackbar("area_min",win_name,&tgt_size_param.area_min, 50000);
+    cv::createTrackbar("area_max",win_name,&tgt_size_param.area_max, 100000);
+
+    cv::createTrackbar("area_ratio_max",win_name,&tgt_size_param.area_ratio_max, 10000);
+    cv::createTrackbar("len_ratio_max",win_name,&tgt_size_param.len_ratio_max, 5000);
 
     static int area_radio_min=tgt_size_param.area_radio_min*100000;
     cv::createTrackbar("area_radio_min",win_name,&area_radio_min, 100000);
@@ -187,7 +201,7 @@ ChestSettings::ChestSettings(const char *param):
     visual_yaw_pid(pidStruct.yaw_p/double(pidStruct.p_division),pidStruct.yaw_i/double(pidStruct.i_division),
                       pidStruct.yaw_d/double(pidStruct.d_division),pidStruct.yaw_division)//init yaw pid
 {
-    //读取配置
+    //读取装甲板配置
     this->read_param_armor(param);
     //读取模板
  //   cv::Mat tem = cv::imread(ARMOR_LEFT,0);
@@ -199,7 +213,7 @@ ChestSettings::ChestSettings(const char *param):
     //template_path = EMPLATE_PATH;
 }
 
-void ChestSettings::setArmorParam()
+void ChestSettings::setChestParam()
 {
     setPreprocessParam(WIN_NAME_TARGET);
     setTgtSizeParam(WIN_NAME_TARGET);
@@ -217,12 +231,20 @@ void ChestSettings::read_param_armor(const char *param_path)
     fs["gray_max_w"] >> preprocess_param.gray_max_w;
     fs["gray_avg_w"] >> preprocess_param.gray_avg_w;
 
+//    fs["hough_circle_param1"] >> tgt_size_param.hough_circle_param1;
+//    fs["hough_circle_param2"] >> tgt_size_param.hough_circle_param2;
+//    fs["hough_circle_minradius"] >> tgt_size_param.hough_circle_minradiu;
+
     fs["len_min"] >> tgt_size_param.len_min;
     fs["len_max"] >> tgt_size_param.len_max;
     fs["light_radio_min"] >> tgt_size_param.radio_min;
     fs["light_radio_max"] >> tgt_size_param.radio_max;
     fs["light_area_min"] >> tgt_size_param.area_min;
     fs["light_area_max"] >> tgt_size_param.area_max;
+
+    fs["area_ratio_max"] >> tgt_size_param.area_ratio_max;
+    fs["len_ratio_max"] >> tgt_size_param.len_ratio_max;
+
     fs["area_radio_min"] >> tgt_size_param.area_radio_min;
     fs["area_radio_max"] >> tgt_size_param.area_radio_max;
     fs["area_len_radio_min"] >> tgt_size_param.area_len_radio_min;
@@ -270,12 +292,20 @@ void ChestSettings::write_param_armor(const char *param_path)
     fs << "gray_max_w" << preprocess_param.gray_max_w;
     fs << "gray_avg_w" << preprocess_param.gray_avg_w;
 
+//    fs << "hough_circle_param1" << tgt_size_param.hough_circle_param1;
+//    fs << "hough_circle_param2" << tgt_size_param.hough_circle_param2;
+//    fs << "hough_circle_minradius" << tgt_size_param.hough_circle_minradiu;
+
     fs << "len_min" << tgt_size_param.len_min;
     fs << "len_max" << tgt_size_param.len_max;
     fs << "light_radio_min" << tgt_size_param.radio_min;
     fs << "light_radio_max" << tgt_size_param.radio_max;
     fs << "light_area_min" << tgt_size_param.area_min;
     fs << "light_area_max" << tgt_size_param.area_max;
+
+    fs << "area_ratio_max" << tgt_size_param.area_ratio_max;
+    fs << "len_ratio_max" << tgt_size_param.len_ratio_max;
+
     fs << "area_radio_min" << tgt_size_param.area_radio_min;
     fs << "area_radio_max" << tgt_size_param.area_radio_max;
     fs << "area_len_radio_min" << tgt_size_param.area_len_radio_min;

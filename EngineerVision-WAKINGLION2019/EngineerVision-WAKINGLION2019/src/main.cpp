@@ -49,7 +49,7 @@ int main()
     cap0.open(VIDEO_PATH,
               SHOW_WIDTH / SHOW_RADIO,
               SHOW_HEIGHT / SHOW_RADIO,
-              20);
+              150);
     //摄像头test（帧率和曝光时间的问题未解决）
 //    cap0.testMVProc();
 #endif
@@ -129,9 +129,9 @@ void mainProcessing(MainSettings *main_setting,
 {
     //Kalman KF;
     //-----------------------------------【类初始化】--------------------------------------------
-    // brief：
+    // brief
     //------------------------------------------------------------------------------------------------
-    //装甲检测（装甲设置类，主要功能设置类，轮廓）
+    //弹药箱检测（弹药箱设置类，主要功能设置类，轮廓）
     ChestDetection chest(chest_setting,main_setting, chest_setting->chest_contours);
     //角度解算
     AngleSolver angle_slover(PARAM_CALIBRATION_752,
@@ -183,8 +183,8 @@ void mainProcessing(MainSettings *main_setting,
         main_setting->debug.n_save_result++;
         main_setting->write_param_other(PARAM_OTHER_PATH);
 
-        s_ret<<SAVE_VIDEO_DIR<<"sentry_"<<"ret_"<<n<<".avi";
-        s_src<<SAVE_VIDEO_DIR<<"sentry_"<<"src_"<<n<<".avi";
+        s_ret<<SAVE_VIDEO_DIR<<"engineer_"<<"ret_"<<n<<".avi";
+        s_src<<SAVE_VIDEO_DIR<<"engineer_"<<"src_"<<n<<".avi";
 
         vw_ret.open(s_ret.str(),
                     cv::VideoWriter::fourcc('M', 'J', 'P', 'G'),
@@ -248,13 +248,9 @@ void mainProcessing(MainSettings *main_setting,
 #ifdef DEBUG_MODE
 #ifdef USE_DEBUG
     // 线程5：设置参数
-    if(main_setting->main_mode==armor_mode)
+    if(main_setting->main_mode==chest_mode)
     {
-        armor_setting->setArmorParam();
-    }
-    else if(main_setting->main_mode==rune_mode)
-    {
-        rune_setting->setRuneParam();
+        chest_setting->setChestParam();
     }
     //线程6：gui调试：未完成
     //std::thread process_gui(&Gui::processing,gui,&setting,&cap0);
@@ -335,9 +331,10 @@ void mainProcessing(MainSettings *main_setting,
                 {
 #ifdef DEBUG_MODE
                 
-#endif				
-					double pos_ref = pos - angle_slover.getImageCenter().x;
-
+#endif
+                    cv::Point2f image_center(angle_slover.getImageCenter().x,angle_slover.getImageCenter().y);
+                    double pos_ref = pos - image_center.x;
+                    cv::circle(src,image_center,3,cv::Scalar(0,0,255),-1);
                     //过滤1：卡尔曼
 //                    cv::Mat state={};
 //                    float *p_state=state.ptr<float>(0);
@@ -364,6 +361,12 @@ void mainProcessing(MainSettings *main_setting,
 						pos_send = pos_last;
                     }
 					pos_last = pos_ref;
+
+#ifdef DEBUG_MODE
+                    std::ostringstream s;
+                    s<<"Distance: "<<pos_send;
+                    cv::putText(src, s.str(), cv::Point2f(20, 20), cv::FONT_HERSHEY_COMPLEX, 0.6, cv::Scalar(0, 255, 255), 1);
+#endif
 
 #ifdef USE_SERIAL
 #ifdef DEBUG_VISUAL_PID
@@ -399,8 +402,8 @@ void mainProcessing(MainSettings *main_setting,
             else{
                 lost_flag++;
 #ifdef USE_VISUAL_PID
-				chest_setting->visual_pitch_pid.adaptiveCleanControlTimes();
-				chest_setting->visual_yaw_pid.adaptiveCleanControlTimes();
+//				chest_setting->visual_pitch_pid.adaptiveCleanControlTimes();
+//				chest_setting->visual_yaw_pid.adaptiveCleanControlTimes();
 #endif
 #ifdef USE_SERIAL
                 //pack_data->setPc2StmMesg()->chassis_control_data.time=t1;
@@ -435,7 +438,7 @@ void mainProcessing(MainSettings *main_setting,
 #endif
         }
 
-        if(main_setting->debug.b_show_fps)
+        if(main_setting->debug.b_show_fps)     //打印发送频率
         {
             t2=cv::getTickCount();
             std::cout << "FPS: " << cv::getTickFrequency()/(t2 - t1) << " frame No.:" << frame_num << std::endl;
@@ -452,7 +455,7 @@ void mainProcessing(MainSettings *main_setting,
 #ifdef DEBUG_MODE
         //按键s保存参数
         main_setting->debug.n_key_order=cv::waitKey(1);
-        if(main_setting->debug.n_key_order=='q')break;
+        if(main_setting->debug.n_key_order=='q')break;   //退出
 
         if(main_setting->debug.n_key_order==KEY_SAVE_PARAM)
         {
@@ -475,6 +478,7 @@ void mainProcessing(MainSettings *main_setting,
                 vw_src.release();
             }
         }
+        cv::imshow("result",src);
     }
 #if (USE_VIDEO==3)
     MVVideoCapture::Stop();

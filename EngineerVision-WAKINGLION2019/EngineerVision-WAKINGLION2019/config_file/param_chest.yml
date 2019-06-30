@@ -2,16 +2,18 @@
 ---
 armor_height: 4.2439915814364790e-314
 armor_width: 6.9530625420595988e-310
-gray_thre_min: 60
-gray_thre_max: 190
+gray_thre_min: 44
+gray_thre_max: 189
 gray_max_w: 4
 gray_avg_w: 8
-len_min: 15
-len_max: 623
+len_min: 400
+len_max: 900
 light_radio_min: 2
 light_radio_max: 15
-light_area_min: 10
-light_area_max: 7864
+light_area_min: 10000
+light_area_max: 36000
+area_ratio_max: 1800
+len_ratio_max: 100
 area_radio_min: 3.0000001192092896e-01
 area_radio_max: 9.9387001991271973e-01
 area_len_radio_min: 6.0000002384185791e-01

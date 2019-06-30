@@ -22,11 +22,11 @@
 // brief：
 //------------------------------------------------------------------------------------------------
 #define DEBUG_MODE     //调试模式
-//#define USE_DEBUG
+#define USE_DEBUG
 //#define USE_DEBUG_CAMERA
 #define SAVE_PIC   1   //0自动截图 1按键截图
 //#define SHOW_DEBUG_IMG_CHOOSE  //筛选装甲板调试
-#define USE_VIDEO  3   //0摄像头/视频 1图片 2摄像头多线程 3迈德威视摄像头
+#define USE_VIDEO  2   //0摄像头/视频 1图片 2摄像头多线程 3迈德威视摄像头
 #define SHOW_RADIO 1   //显示比例
 //#define USE_SHAPEGAN
 #define USE_SERIAL 1    //使用串口
@@ -34,18 +34,18 @@
 //#define USE_RECEIVE_STM32_INFO 1
 
 //debug visual pid
-#define DEBUG_VISUAL_PID //debug pid
+//#define DEBUG_VISUAL_PID //debug pid
 #define USE_VISUAL_PID
 
 //-----------------------------------【宏定义-调试模块】--------------------------------------------
 // brief：
 //------------------------------------------------------------------------------------------------
-//#define VIDEO_PATH             "/dev/video0"
-#define VIDEO_PATH            "/home/robo-xiao/rm2019/sentry_src_139.avi"     //测试视频路径
+#define VIDEO_PATH             "/dev/video0"
+//#define VIDEO_PATH            "/home/robo-xiao/rm2019/sentry_src_139.avi"     //测试视频路径
 #define PIC_PATH               "./test_pic/Rect.jpg"  //测试图片路径
 #define WIN_NAME_TARGET        "目标检测调试"             //调试窗口命名
 #define WIN_NAME_VISUALPID     "pid调试窗口名"
-#define SHOW_WIDTH             752//640
+#define SHOW_WIDTH             640//752
 #define SHOW_HEIGHT            480
 #define DATA_BUFF_ROW_SIZE_MAX 5
 #define DATA_BUFF_COL_SIZE_MAX 1200
@@ -61,13 +61,13 @@
 
 #define ARMOR_TEMPLATE_PATH "E:/Rm2019/EngineerVision-WAKINGLION2019/EngineerVision-WAKINGLION2019/template_path/"
 #else
-#define PARAM_OTHER_PATH "/home/robo/rm2019/EngineerVision-WAKINGLION2019/EngineerVision-WAKINGLION2019/config_file/param_other.yml"  //全局配置文件路径
-#define PARAM_CHEST_PATH "/home/robo/rm2019/EngineerVision-WAKINGLION2019/EngineerVision-WAKINGLION2019/config_file/param_chest.yml"
+#define PARAM_OTHER_PATH "/home/robo/rm2019/engineer_visual/EngineerVision-WAKINGLION2019/EngineerVision-WAKINGLION2019/config_file/param_other.yml"  //全局配置文件路径
+#define PARAM_CHEST_PATH "/home/robo/rm2019/engineer_visual/EngineerVision-WAKINGLION2019/EngineerVision-WAKINGLION2019/config_file/param_chest.yml"
 
-#define PARAM_CALIBRATION_752  "/home/robo/rm2019/EngineerVision-WAKINGLION2019/EngineerVision-WAKINGLION2019/calibration/Camera752.xml"  //相机参数
+#define PARAM_CALIBRATION_752  "/home/robo/rm2019/engineer_visual/EngineerVision-WAKINGLION2019/EngineerVision-WAKINGLION2019/calibration/Camera752.xml"  //相机参数
 
-#define SAVE_VIDEO_DIR "/home/robo/rm2019/EngineerVision-WAKINGLION2019/EngineerVision-WAKINGLION2019/save_video/"
-#define SAVE_PIC_DIR   "/home/robo/rm2019/EngineerVision-WAKINGLION2019/EngineerVision-WAKINGLION2019/save_pic/"
+#define SAVE_VIDEO_DIR "/home/robo/rm2019/engineer_visual/EngineerVision-WAKINGLION2019/EngineerVision-WAKINGLION2019/save_video/"
+#define SAVE_PIC_DIR   "/home/robo/rm2019/engineer_visual/EngineerVision-WAKINGLION2019/EngineerVision-WAKINGLION2019/save_pic/"
 #endif
 //-----------------------------------【宏定义-键盘指令】--------------------------------------------
 // brief：
@@ -163,7 +163,7 @@ enum EnemyColor
 };
 
 //-----------------------------------【配置-模式】--------------------------------------------
-// brief：甲板模式/神符模式
+// brief：弹药箱模式
 //------------------------------------------------------------------------------------------------
 enum MainMode
 {
@@ -202,29 +202,29 @@ public:
     void setCameraParam(const char *win_name)
     {
         cv::namedWindow(win_name);
-        static int x=cp.x*100.;
-        cv::createTrackbar("cp-x",win_name,&x, 1000);
-        cp.x=x/100.;
+//        static int x=cp.x*100.;
+//        cv::createTrackbar("cp-x",win_name,&x, 1000);
+//        cp.x=x/100.;
 
-        static int y=cp.y*100.;
-        cv::createTrackbar("cp-y",win_name,&y, 1000);
-        cp.y=y/100.;
+//        static int y=cp.y*100.;
+//        cv::createTrackbar("cp-y",win_name,&y, 1000);
+//        cp.y=y/100.;
 
-        static int z=cp.z*100.;
-        cv::createTrackbar("cp-z",win_name,&z, 3000);
-        cp.z=z/100.;
+//        static int z=cp.z*100.;
+//        cv::createTrackbar("cp-z",win_name,&z, 3000);
+//        cp.z=z/100.;
 
-        static int y_offset=cp.y_offset*100.;
-        cv::createTrackbar("cp-y_offset",win_name,&y_offset, 1000);
-        cp.y_offset=y_offset/100.;
+//        static int y_offset=cp.y_offset*100.;
+//        cv::createTrackbar("cp-y_offset",win_name,&y_offset, 1000);
+//        cp.y_offset=y_offset/100.;
 
-        static int overlap_dist=cp.overlap_dist*1.;
-        cv::createTrackbar("cp-overlap_dist",win_name,&overlap_dist, 1000000);
-        cp.overlap_dist=overlap_dist/1.;
+//        static int overlap_dist=cp.overlap_dist*1.;
+//        cv::createTrackbar("cp-overlap_dist",win_name,&overlap_dist, 1000000);
+//        cp.overlap_dist=overlap_dist/1.;
 
-        static int bullet_speed=cp.bullet_speed*100.;
-        cv::createTrackbar("cp-bullet_speed",win_name,&bullet_speed, 3000);
-        cp.bullet_speed=bullet_speed/100.;
+//        static int bullet_speed=cp.bullet_speed*100.;
+//        cv::createTrackbar("cp-bullet_speed",win_name,&bullet_speed, 3000);
+//        cp.bullet_speed=bullet_speed/100.;
     }
 
     /**
@@ -237,7 +237,8 @@ public:
     void read_param_other(const char *param_path);
 
     /**
-     * @brief  保存配置
+     * @brief  保存配置mainProcessing(MainSettings *main_setting,
+                    ChestSettings
      * @param  第一个参数
      * @return 返回值
      * @autor  梁尧森
@@ -311,6 +312,10 @@ struct TargetSizeParam
     int radio_max; //长宽比最大值
     int area_min;  //最小面积
     int area_max;  //最大面积
+
+    int area_ratio_max;
+    int len_ratio_max;
+
     float area_radio_min;   //矩形度最小值
     float area_radio_max;   //矩形度最大值
     float area_len_radio_min;
@@ -318,6 +323,10 @@ struct TargetSizeParam
     int corners_size_min;
     int slope_offset;  //角度偏移
     int color_th;
+
+    int hough_circle_param1;
+    int hough_circle_param2;
+    int hough_circle_minradiu; //最小半径
     TargetSizeParam()
     {
         len_min=50;
@@ -326,6 +335,7 @@ struct TargetSizeParam
         radio_max=2;
         area_min=5000;
         area_max=300000;
+        area_ratio_max = 4277;
         area_radio_min=0.5;
         area_radio_max=1.2f;
         area_len_radio_min=0.5;
@@ -333,6 +343,10 @@ struct TargetSizeParam
         corners_size_min=7;
         slope_offset=15;
         color_th=60;
+
+        hough_circle_param1=10;
+        hough_circle_param2=10;
+        hough_circle_minradiu=10;
     }
 };
 
@@ -434,28 +448,28 @@ public:
 	ChestSettings(const char *param);
 
     /**
-     * @brief  设置装甲参数线程
+     * @brief  设置弹药箱参数线程
      * @return 返回值
-     * @autor  梁尧森
+     * @autor  马兴沛
      * @date
      */
-    void setArmorParam();
+    void setChestParam();
 
     /**
-     * @brief  读取装甲配置
+     * @brief  读取弹药箱配置
      * @param  第一个参数
      * @return 返回值
-     * @autor  梁尧森
-     * @date   2019.3.7
+     * @autor  马兴沛
+     * @date
      */
     void read_param_armor(const char *param_path);
 
     /**
-     * @brief  保存装甲配置
+     * @brief  保存弹药箱配置
      * @param  第一个参数
      * @return 返回值
-     * @autor  梁尧森
-     * @date   2019.3.7
+     * @autor  马兴沛
+     * @date
      */
     void write_param_armor(const char *param_path);
 

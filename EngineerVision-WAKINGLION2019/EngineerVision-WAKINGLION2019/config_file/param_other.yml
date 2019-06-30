@@ -8,8 +8,8 @@ debug-b_show_target: 0
 debug-b_show_armor: 0
 debug-b_show_result: 0
 debug-b_show_fps: 1
-debug-b_save_result: 1
-debug-n_save_result: 167
+debug-b_save_result: 0
+debug-n_save_result: 343
 debug-b_save_pic: 0
 debug-f_save_pic_inter: 2389
 debug-expore_time: 100000

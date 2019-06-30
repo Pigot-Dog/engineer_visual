@@ -322,12 +322,12 @@ void DataCollect::gui()
 //    static int offset_t_subhalf=canvas_w*ra;
 
     //设置比例
-    namedWindow("gui",cv::WINDOW_AUTOSIZE);
-    cv::createTrackbar("proportion_v_subhalf_red","gui",&proportion_v_subhalf_red,ra,NULL);
-    cv::createTrackbar("proportion_t_subhalf_red","gui",&proportion_t_subhalf_red,ra,NULL);
+    cv::namedWindow("gui",cv::WINDOW_AUTOSIZE);
+//    cv::createTrackbar("proportion_v_subhalf_red","gui",&proportion_v_subhalf_red,ra,NULL);
+//    cv::createTrackbar("proportion_t_subhalf_red","gui",&proportion_t_subhalf_red,ra,NULL);
 
-    cv::createTrackbar("proportion_v_subhalf_exp","gui",&proportion_v_subhalf_exp,ra,NULL);
-    cv::createTrackbar("proportion_t_subhalf_exp","gui",&proportion_t_subhalf_exp,ra,NULL);
+//    cv::createTrackbar("proportion_v_subhalf_exp","gui",&proportion_v_subhalf_exp,ra,NULL);
+//    cv::createTrackbar("proportion_t_subhalf_exp","gui",&proportion_t_subhalf_exp,ra,NULL);
 
     pro_offset.proportion_v=proportion_v_subhalf_exp*proportion_v_subhalf_red/ra;
     pro_offset.proportion_t=proportion_t_subhalf_exp*ra*proportion_t_subhalf_red/ra;

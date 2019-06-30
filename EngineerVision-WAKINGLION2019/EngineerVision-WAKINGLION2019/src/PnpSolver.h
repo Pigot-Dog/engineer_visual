@@ -27,7 +27,7 @@ public:
 		}
 
 		fs["Camera_Matrix"] >> cam_matrix;
-		fs["Distortion_Coefficients"] >> distortion_coeff;
+        fs["Distortion_Coefficients"] >> distortion_coeff;    //畸变系数
 
 		fs["board_Width"] >> width_target;
 		fs["board_Height"] >> height_target;
@@ -121,7 +121,7 @@ public:
 	 */
 	cv::Point2f getImageCenter()
 	{
-        return cv::Point2f(cam_matrix.at<double>(0, 2), cam_matrix.at<double>(1, 2));
+        return cv::Point2f(cam_matrix.at<double>(0, 2), cam_matrix.at<double>(1, 2));  //cx，cy
 	}
 public:
 	cv::Mat cam_matrix;        //内参矩阵
@@ -156,8 +156,8 @@ public:
 		min_distance = min_dist;
 		max_distance = max_dist;
 
-		rot_camera2ptz = cv::Mat::eye(3, 3, CV_64FC1);
-		trans_camera2ptz = cv::Mat::zeros(3, 1, CV_64FC1);
+        rot_camera2ptz = cv::Mat::eye(3, 3, CV_64FC1);   //旋转矩阵
+        trans_camera2ptz = cv::Mat::zeros(3, 1, CV_64FC1);  //平移矩阵
 		offset_y_barrel_ptz = 0;
 	}
 
@@ -208,7 +208,7 @@ public:
         double theta = -atan((ptz_camera_y + y_offset_barrel_ptz) / overlap_dist);
         std::cout<<"theta= "<<theta<<std::endl;
 		double r_data[] = { 1,0,0,
-		0,cos(theta),-sin(theta),
+        0,cos(theta),-sin(theta),
 		0, sin(theta), cos(theta) };
 		
 		cv::Mat rot_camera_ptz(3, 3, CV_64FC1, r_data);

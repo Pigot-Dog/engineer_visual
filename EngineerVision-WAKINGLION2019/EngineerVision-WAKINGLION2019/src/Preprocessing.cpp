@@ -6,25 +6,42 @@
 //Preprocessing类
 Preprocessing::Preprocessing()
 {
-    element_size = 5;
+    element_size = 19;
+    element_size1 = 29;
+    element_size2 = 31;
 }
 
 
 Preprocessing::~Preprocessing()
 {
-    element1 = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(1, 5));
-    element2 = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(3, 7));
+    element3 = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(1, 5));
+    element4 = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(3, 7));
 }
 
 void Preprocessing::setStructElement()
 {
+    cv::namedWindow(WIN_NAME_HSV);
     cv::createTrackbar("element_size", WIN_NAME_HSV, &element_size, 50, on_setStructElement, &element);
-    //on_setStructElement(element_size,0);
+    cv::createTrackbar("element_size1", WIN_NAME_HSV, &element_size1, 50);
+    cv::createTrackbar("element_size2", WIN_NAME_HSV, &element_size2, 50);
+//    on_setStructElement(element_size,0);
+    on_setStructElement1(element_size1,&element1);
+    on_setStructElement2(element_size2,&element2);
 }
 
 void on_setStructElement(int element_size, void* element)
 {
     *(cv::Mat*)element = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(element_size, element_size));
+}
+
+void on_setStructElement1(int element_size1, cv::Mat* element1)
+{
+    *(cv::Mat*)element1 = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(element_size1, element_size1));
+}
+
+void on_setStructElement2(int element_size2, cv::Mat* element2)
+{
+    *(cv::Mat*)element2 = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(element_size2, element_size2));
 }
 
 //AdaptiveThreshold类
@@ -34,7 +51,7 @@ AdaptiveThreshold::AdaptiveThreshold()
     adt.param2 = 255;
 }
 
-AdaptiveThreshold::AdaptiveThreshold(struct PreprocessParam &preprocess_param)
+AdaptiveThreshold:: AdaptiveThreshold(struct PreprocessParam &preprocess_param)
 {
     this->preprocess_param=&preprocess_param;
 }
@@ -52,8 +69,9 @@ void AdaptiveThreshold::adaptiveThresholdProc(cv::Mat src, cv::Mat &dst,
     {
     case 0://hsv
     {
-        setHsv();
-        hsvThresholdProc(src, dst);
+        setHsv();   //设置HSV颜色空间阈值
+        hsvThresholdProc(src, dst);  //图像hsv二值化处理
+        cv::imshow("bin", dst);
         break;
     }
     case 1://Canny
@@ -66,14 +84,16 @@ void AdaptiveThreshold::adaptiveThresholdProc(cv::Mat src, cv::Mat &dst,
         cv::adaptiveThreshold(src, dst, 255, cv::ADAPTIVE_THRESH_MEAN_C, cv::THRESH_BINARY,
             preprocess_param->gray_thre_min * 2 + 1,
             preprocess_param->gray_thre_max);//参数要改
-        //cv::imshow("bin", dst);
-        //cv::waitKey();
+        cv::imshow("bin", dst);
+//        cv::waitKey();
         break;
     case 3://大津算法
+        setAdaptive();
         cvtColor(src, src, cv::COLOR_BGR2GRAY);
+        cv::imshow("gray",src);
         cv::threshold(src, dst, adt.param1, 255, cv::THRESH_BINARY | cv::THRESH_OTSU);
-        //cv::imshow("bin",dst);
-        //cv::waitKey();
+        cv::imshow("bin",dst);
+//        cv::waitKey();
         break;
     case 5:
     {
@@ -171,33 +191,50 @@ void AdaptiveThreshold::adaptiveThresholdProc(cv::Mat src, cv::Mat &dst,
         }
     }
     break;
-    default://全局
-        //std::cout<<adt.param1<<std::endl;
+    case 9:
+    {
         cvtColor(src, src, cv::COLOR_BGR2GRAY);
         cv::inRange(src, cv::Scalar(preprocess_param->gray_thre_min),
             cv::Scalar(preprocess_param->gray_thre_max), dst);
         cv::imshow("bin", dst);
+    }break;
+    default://全局
+        cvtColor(src, dst, cv::COLOR_BGR2GRAY);
+//        //std::cout<<adt.param1<<std::endl;
+//        cvtColor(src, src, cv::COLOR_BGR2GRAY);
+//        cv::inRange(src, cv::Scalar(preprocess_param->gray_thre_min),
+//            cv::Scalar(preprocess_param->gray_thre_max), dst);
+//        cv::imshow("bin", dst);
         break;
     }
 
     switch (morphology)
     {
-        setStructElement();
     case 1://开操作
+        setStructElement();
         cv::morphologyEx(dst, dst, cv::MORPH_OPEN, element, cv::Point(-1,-1), iteration);
+        cv::imshow("morpholog",dst);
         break;
     case 2://闭操作
+        setStructElement();
         cv::morphologyEx(dst, dst, cv::MORPH_CLOSE, element, cv::Point(-1, -1), iteration);
+        cv::imshow("morpholog",dst);
+        break;
+    case 3:
+        setStructElement();
+        cv::morphologyEx(dst, dst, cv::MORPH_OPEN, element1, cv::Point(-1,-1), iteration);
+        cv::morphologyEx(dst, dst, cv::MORPH_CLOSE, element2, cv::Point(-1, -1), iteration);
+        cv::imshow("morpholog",dst);
         break;
     }
-
     switch (filter)
     {
     case 1://开操作、闭操作
-
+        cv::imshow("filter",dst);
         break;
     case 2://中值滤波
         cv::medianBlur(dst, dst, 3);
+        cv::imshow("filter",dst);
         break;
     }
 }
@@ -213,8 +250,9 @@ void AdaptiveThreshold::setAdaptive()
 void AdaptiveThreshold::hsvThresholdProc(cv::Mat src, cv::Mat &dst)
 {
     cv::Mat bgr_img, hsv_img, bin_img, bin2_img;
-    src.convertTo(bgr_img, CV_32FC3, 1.0 / 255, 0);
+    src.convertTo(bgr_img, CV_32FC3, 1.0 / 255, 0);  //图像归一化
     cv::cvtColor(bgr_img, hsv_img, cv::COLOR_BGR2HSV);
+    cv::imshow("hsv",hsv_img);
     inRange(hsv_img,
             cv::Scalar(hsv.hmin, hsv.smin / 255.0, hsv.vmin / 255.0),
             cv::Scalar(hsv.hmax, hsv.smax / 255.0, hsv.vmax / 255.0), bin_img);
@@ -412,8 +450,8 @@ int AdaptiveThreshold::avgGrayThreshold(cv::Mat src)
 
 void AdaptiveThreshold::filter(cv::Mat &dst)
 {
-    cv::erode(dst, dst, element1);
-    cv::dilate(dst, dst, element2);
+    cv::erode(dst, dst, element3);
+    cv::dilate(dst, dst, element4);
 
 //    setStructElement();
 //    cv::morphologyEx(dst, dst, cv::MORPH_OPEN, element);

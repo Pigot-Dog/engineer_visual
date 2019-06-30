@@ -25,7 +25,7 @@ public:
 	{
 		this->chest_setting = chest_setting;
 		this->main_setting = main_setting;
-	}
+    }
 
 	/**
 	 * @brief  ¼ì²â³öËùÓĞµ¯Ò©Ïä

@@ -43,7 +43,11 @@ public:
     cv::Mat element;
     cv::Mat element1;
     cv::Mat element2;
+    cv::Mat element3;
+    cv::Mat element4;
     int element_size;
+    int element_size1;
+    int element_size2;
 };
 
 //-----------------------------------【二值化】--------------------------------------------
@@ -186,5 +190,7 @@ private:
 };
 
 void on_setStructElement(int, void*);
+void on_setStructElement1(int, cv::Mat*);
+void on_setStructElement2(int, cv::Mat*);
 
 #endif

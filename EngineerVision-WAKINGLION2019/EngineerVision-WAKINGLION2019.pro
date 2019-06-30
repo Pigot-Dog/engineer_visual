@@ -15,9 +15,9 @@ INCLUDEPATH += -I/usr/local/include \
 
 LIBS += -L/usr/local/lib -lopencv_ml -lopencv_dnn -lopencv_objdetect -lopencv_stitching -lopencv_superres -lopencv_videostab -lopencv_photo -lopencv_shape -lopencv_video -lopencv_calib3d -lopencv_features2d -lopencv_highgui -lopencv_videoio -lopencv_imgcodecs -lopencv_imgproc -lopencv_flann -lopencv_core
 
-QMAKE_CFLAGS  =`pkg-config --cflags opencv`
-LIBS += `pkg-config --libs opencv` -lMVSDK
-INCLUDEPATH = -I./include
+#QMAKE_CFLAGS  =`pkg-config --cflags opencv`
+#LIBS += `pkg-config --libs opencv` -lMVSDK
+#INCLUDEPATH = -I./include
 
 HEADERS += \
     EngineerVision-WAKINGLION2019/src/ChestDetection.h \
@@ -39,6 +39,9 @@ HEADERS += \
     EngineerVision-WAKINGLION2019/src/TargetDetection.h \
     EngineerVision-WAKINGLION2019/src/Tool.h \
     EngineerVision-WAKINGLION2019/src/VideoCaptureFactory.h \
+    EngineerVision-WAKINGLION2019/include/CameraStatus.h \
+    EngineerVision-WAKINGLION2019/include/CameraDefine.h \
+    EngineerVision-WAKINGLION2019/include/CameraApi.h \
     EngineerVision-WAKINGLION2019/src/VisualPid.h
 
 SOURCES += \
@@ -60,3 +63,16 @@ SOURCES += \
     EngineerVision-WAKINGLION2019/src/TargetDetection.cpp \
     EngineerVision-WAKINGLION2019/src/Tool.cpp \
     EngineerVision-WAKINGLION2019/src/VideoCaptureFactory.cpp
+
+DISTFILES += \
+    EngineerVision-WAKINGLION2019/config_file/param_chest.yml \
+    EngineerVision-WAKINGLION2019/config_file/param_other.yml \
+    EngineerVision-WAKINGLION2019/calibration/Camera752.xml
+#    EngineerVision-WAKINGLION2019/config_file/param_armor.yml \
+
+#    EngineerVision-WAKINGLION2019/config_file/param_pid-sentry7.yml \
+#    EngineerVision-WAKINGLION2019/config_file/param_pid-hero1.yml \
+#    EngineerVision-WAKINGLION2019/config_file/param_pid-fantry5.yml \
+#    EngineerVision-WAKINGLION2019/config_file/param_pid-fantry3.yml \
+#    EngineerVision-WAKINGLION2019/config_file/right.jpg \
+#    EngineerVision-WAKINGLION2019/config_file/left.jpg

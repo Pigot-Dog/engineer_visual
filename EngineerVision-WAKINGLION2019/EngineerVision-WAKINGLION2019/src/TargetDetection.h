@@ -182,7 +182,7 @@ public:
 
 #ifdef DEBUG_MODE
 		cv::imshow("3.tgt_det", ret);
-		//cv::waitKey();
+        cv::waitKey();
 #endif
 
 		ret.release();
@@ -229,6 +229,18 @@ public:
 		std::vector<cv::Rect> &rect_list,
 		std::vector<struct TargetSize> &target_size_list,
 		const std::vector<double> &hu_list = std::vector<double>());
+
+	/**
+	 * @brief  霍夫圆变换提取最大的圆（重载四）
+	 * @param  源图-二值图
+ 	 * @param  霍夫圆容器
+	 * @return 是否有目标
+	 * @autor  马兴沛
+	 * @date   2019.6.30
+	 */
+    bool targetDetectionProc(cv::Mat ret,cv::Mat bin,
+                             std::vector<cv::Point2f>&need_centers,
+                             std::vector<float>&need_radius);
 
 	/**
 	 * @brief  获取索引值（重载一）
@@ -505,6 +517,9 @@ protected:
     std::vector<struct TargetSize>      target_size_list;
     std::vector<int>                    contours_idx;
     std::vector<Index>                  vin;
+
+    std::vector<cv::Point2f>            centers;
+    std::vector<float>                  radius;
 private:
     cv::Mat ret;
 
