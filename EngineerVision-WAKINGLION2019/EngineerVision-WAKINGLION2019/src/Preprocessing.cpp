@@ -194,12 +194,14 @@ void AdaptiveThreshold::adaptiveThresholdProc(cv::Mat src, cv::Mat &dst,
     case 9:
     {
         cvtColor(src, src, cv::COLOR_BGR2GRAY);
+
         cv::inRange(src, cv::Scalar(preprocess_param->gray_thre_min),
-            cv::Scalar(preprocess_param->gray_thre_max), dst);
+            (preprocess_param->gray_thre_max), dst);
+//        cv::threshold(src, dst, 100,255, cv::THRESH_BINARY | cv::THRESH_OTSU);
         cv::imshow("bin", dst);
     }break;
     default://全局
-        cvtColor(src, dst, cv::COLOR_BGR2GRAY);
+//        cvtColor(src, dst, cv::COLOR_BGR2GRAY);
 //        //std::cout<<adt.param1<<std::endl;
 //        cvtColor(src, src, cv::COLOR_BGR2GRAY);
 //        cv::inRange(src, cv::Scalar(preprocess_param->gray_thre_min),

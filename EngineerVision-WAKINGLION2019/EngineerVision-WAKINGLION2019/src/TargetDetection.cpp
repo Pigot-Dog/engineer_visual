@@ -132,6 +132,12 @@ bool TargetDetection::targetDetectionProc(cv::Mat ret,cv::Mat bin,
     float digits_size=0.5;
     int y_dist=20;
 #endif
+    if(need_centers.size())
+        need_centers.clear();
+
+    if(need_radius.size())
+        need_radius.clear();
+
     std::vector<std::vector<cv::Point>> contours;
     std::vector<cv::Vec4i> hierarchy;
 
@@ -147,38 +153,8 @@ bool TargetDetection::targetDetectionProc(cv::Mat ret,cv::Mat bin,
        cv::Point2f centers;
        float radius;
 
-       cv::minEnclosingCircle(contours[i],centers,radius);
-
        target_size.area = cv::contourArea(contours[i]);
-       minclose_area = radius*radius*PI;
-       area_ratio = abs(minclose_area - target_size.area);
-
        target_size.len=cv::arcLength(contours[i],true);
-       minclose_len = 2*radius*PI;
-       len_ratio = abs(minclose_len - target_size.len);
-       //面积比
-       if(area_ratio < tsize->area_ratio_max)
-       {
-        std::ostringstream s;
-        s<<"area ratio: "<<area_ratio;
-        cv::putText(ret, s.str(), cv::Point2f(centers)+cv::Point2f(0, y_dist), cv::FONT_HERSHEY_COMPLEX, digits_size, cv::Scalar(0, 0, 255), 1);
-       }
-       else
-       {
-           continue;
-       }
-
-       //周长比
-       if(len_ratio < tsize->len_ratio_max)
-       {
-        std::ostringstream s;
-        s<<"len ratio: "<<len_ratio;
-        cv::putText(ret, s.str(), cv::Point2f(centers)+cv::Point2f(0, 2*y_dist), cv::FONT_HERSHEY_COMPLEX, digits_size, cv::Scalar(0, 255, 255), 1);
-       }
-       else
-       {
-           continue;
-       }
 
        //面积
        if(target_size.area > tsize->area_min && target_size.area < tsize->area_max)
@@ -204,6 +180,43 @@ bool TargetDetection::targetDetectionProc(cv::Mat ret,cv::Mat bin,
            continue;
        }
 
+       cv::minEnclosingCircle(contours[i],centers,radius);
+
+       minclose_area = radius*radius*PI;
+       area_ratio = abs(minclose_area - target_size.area);
+
+       minclose_len = 2*radius*PI;
+       len_ratio = abs(minclose_len - target_size.len);
+      //面积比
+      if(area_ratio < tsize->area_ratio_max)
+      {
+         std::ostringstream s1;
+         std::ostringstream s2;
+         s1<<"area ratio: "<<area_ratio;
+         s2<<"area: "<<target_size.area;
+         cv::putText(ret, s1.str(), cv::Point2f(centers)+cv::Point2f(0, y_dist), cv::FONT_HERSHEY_COMPLEX, digits_size, cv::Scalar(0, 0, 255), 1);
+         cv::putText(ret, s2.str(), cv::Point2f(centers)-cv::Point2f(0, 2*y_dist), cv::FONT_HERSHEY_COMPLEX, digits_size, cv::Scalar(0, 0, 255), 1);
+      }
+      else
+      {
+         continue;
+      }
+
+         //周长比
+      if(len_ratio < tsize->len_ratio_max)
+      {
+          std::ostringstream s1;
+          std::ostringstream s2;
+          s1<<"len ratio: "<<len_ratio;
+          s2<<"len: "<<target_size.len;
+          cv::putText(ret, s1.str(), cv::Point2f(centers)+cv::Point2f(0, 2*y_dist), cv::FONT_HERSHEY_COMPLEX, digits_size, cv::Scalar(0, 255, 0), 1);
+          cv::putText(ret, s2.str(), cv::Point2f(centers)-cv::Point2f(0, y_dist), cv::FONT_HERSHEY_COMPLEX, digits_size, cv::Scalar(0, 255, 0), 1);
+      }
+      else
+      {
+         continue;
+      }
+
        cv::drawContours(ret,contours,i,cv::Scalar(0,255,0),3);
        circle(ret,centers,3,cv::Scalar(0,255,0),-1);
        circle(ret,centers,radius,cv::Scalar(0,0,255),3);
@@ -211,10 +224,7 @@ bool TargetDetection::targetDetectionProc(cv::Mat ret,cv::Mat bin,
        need_centers.push_back(centers);
        need_radius.push_back(radius);
     }
-//    cv::imshow("contours",ret);
 
-
-//    cv::HoughCircles(src,circles,cv::HOUGH_GRADIENT,2,10,100,100,10,500);
     return need_centers.size();
 }
 

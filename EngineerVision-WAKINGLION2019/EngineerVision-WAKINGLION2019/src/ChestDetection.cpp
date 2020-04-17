@@ -36,7 +36,7 @@ bool ChestDetection::detectorProc(cv::Mat src, double &pos, bool &is_small)
         //------------------------------------------------------------------------------------------------
 #ifdef DEBUG_MODE
     setDrawingRetImg(src);  //设置画布，用于绘制检测结果
-    _src = src.clone();
+//    _src = src.clone();
 #endif
 //	std::vector<std::vector<cv::Point>> light_contours;
 //	std::vector<cv::RotatedRect> rot_rect_list;
@@ -51,8 +51,8 @@ bool ChestDetection::detectorProc(cv::Mat src, double &pos, bool &is_small)
 //		hu_list));
 //    std::vector<cv::Vec3f> hough_circles;
 
-    centers.clear();
-    radius.clear();
+//    centers.clear();
+//    radius.clear();
     targetDetectionProc(src,bin,centers,radius);
 
     cout<<"center size: "<< centers.size() << endl;

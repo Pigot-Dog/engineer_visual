@@ -320,7 +320,10 @@ void mainProcessing(MainSettings *main_setting,
             double pos;
             static int lost_flag;
             bool is_small;
-            bool is_find= chest.detectorProc(src, pos,is_small);
+            bool is_find = chest.detectorProc(src, pos,is_small);
+
+            cv::Point2f image_center(angle_slover.getImageCenter().x,angle_slover.getImageCenter().y);
+            cv::circle(src,image_center,3,cv::Scalar(0,0,255),-1);
 
             if(is_find)
             {
@@ -329,53 +332,48 @@ void mainProcessing(MainSettings *main_setting,
 
                 if(1)//if(0)//
                 {
-#ifdef DEBUG_MODE
-                
-#endif
-                    cv::Point2f image_center(angle_slover.getImageCenter().x,angle_slover.getImageCenter().y);
                     double pos_ref = pos - image_center.x;
-                    cv::circle(src,image_center,3,cv::Scalar(0,0,255),-1);
-                    //过滤1：卡尔曼
-//                    cv::Mat state={};
-//                    float *p_state=state.ptr<float>(0);
-//                    KF.process();
+//                    //过滤1：卡尔曼
+////                    cv::Mat state={};
+////                    float *p_state=state.ptr<float>(0);
+////                    KF.process();
 
-                    //过滤2：
-                    static long filter_num=-1;
+//                    //过滤2：
+//                    static long filter_num=-1;
 
-                    static double pos_send;
+//                    static double pos_send;
 
-                    static double pos_last;
+//                    static double pos_last;
 
-                    double pit_ref_diff=std::abs(pos_ref - pos_last);
+//                    double pit_ref_diff=std::abs(pos_ref - pos_last);
 
-                    static double angle_ref_diff_th=0.5f;
-                    if(pit_ref_diff>angle_ref_diff_th)
-                    {
-                        filter_num=0;
-                    } else {
-                        filter_num++;
-                    }
-                    if(filter_num>3)
-                    {
-						pos_send = pos_last;
-                    }
-					pos_last = pos_ref;
-
+//                    static double angle_ref_diff_th=0.5f;
+//                    if(pit_ref_diff>angle_ref_diff_th)
+//                    {
+//                        filter_num=0;
+//                    } else {
+//                        filter_num++;
+//                    }
+//                    if(filter_num>3)
+//                    {
+//                        pos_send = pos_last;
+//                    }
+//                    pos_last = pos_ref;
+                    cout << "Distance: " << pos_ref << endl;
 #ifdef DEBUG_MODE
                     std::ostringstream s;
-                    s<<"Distance: "<<pos_send;
+                    s<<"Distance: "<<pos_ref;
                     cv::putText(src, s.str(), cv::Point2f(20, 20), cv::FONT_HERSHEY_COMPLEX, 0.6, cv::Scalar(0, 255, 255), 1);
 #endif
 
 #ifdef USE_SERIAL
 #ifdef DEBUG_VISUAL_PID
     chest_setting->visual_pitch_pid.setPIDAndDivision(chest_setting->pidStruct.pitch_p/double(chest_setting->pidStruct.p_division), chest_setting->pidStruct.pitch_i/double(chest_setting->pidStruct.i_division),
-													chest_setting->pidStruct.pitch_d/double(chest_setting->pidStruct.d_division), chest_setting->pidStruct.pitch_division);
+                                                    chest_setting->pidStruct.pitch_d/double(chest_setting->pidStruct.d_division), chest_setting->pidStruct.pitch_division);
 #endif
 
 #ifdef USE_VISUAL_PID
-                    double posRef= chest_setting->visual_pitch_pid.calAngle(pos_send,2);
+                    double posRef= chest_setting->visual_pitch_pid.calAngle(pos_ref,2);
                     printf("posRef=%f\n", posRef);
                     pack_data->setPc2StmMesg()->chassis_control_data.x_spd = posRef;
 #else
@@ -391,7 +389,7 @@ void mainProcessing(MainSettings *main_setting,
 #ifdef DEBUG_MODE
                     //5.2.绘制波形
                     angle_data.clear();
-                    angle_data={float(pos_send),
+                    angle_data={float(pos_ref),
                                50,
                                float(posRef),
                                50,
@@ -428,8 +426,8 @@ void mainProcessing(MainSettings *main_setting,
             }
 
 #ifdef DEBUG_MODE
-            //5.2.绘制波形
-            dc.dataCollectProc(angle_data,color_list,"5.pos");
+//            //5.2.绘制波形
+//            dc.dataCollectProc(angle_data,color_list,"5.pos");
 #endif
 
 #ifdef USE_SERIAL

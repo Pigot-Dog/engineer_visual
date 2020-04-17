@@ -61,13 +61,13 @@
 
 #define ARMOR_TEMPLATE_PATH "E:/Rm2019/EngineerVision-WAKINGLION2019/EngineerVision-WAKINGLION2019/template_path/"
 #else
-#define PARAM_OTHER_PATH "/home/robo/rm2019/engineer_visual/EngineerVision-WAKINGLION2019/EngineerVision-WAKINGLION2019/config_file/param_other.yml"  //全局配置文件路径
-#define PARAM_CHEST_PATH "/home/robo/rm2019/engineer_visual/EngineerVision-WAKINGLION2019/EngineerVision-WAKINGLION2019/config_file/param_chest.yml"
+#define PARAM_OTHER_PATH "/home/maxingpei/engineer_visual/EngineerVision-WAKINGLION2019/EngineerVision-WAKINGLION2019/config_file/param_other.yml"  //全局配置文件路径
+#define PARAM_CHEST_PATH "/home/maxingpei/engineer_visual/EngineerVision-WAKINGLION2019/EngineerVision-WAKINGLION2019/config_file/param_chest.yml"
 
-#define PARAM_CALIBRATION_752  "/home/robo/rm2019/engineer_visual/EngineerVision-WAKINGLION2019/EngineerVision-WAKINGLION2019/calibration/Camera752.xml"  //相机参数
+#define PARAM_CALIBRATION_752  "/home/maxingpei/engineer_visual/EngineerVision-WAKINGLION2019/EngineerVision-WAKINGLION2019/calibration/Camera752.xml"  //相机参数
 
-#define SAVE_VIDEO_DIR "/home/robo/rm2019/engineer_visual/EngineerVision-WAKINGLION2019/EngineerVision-WAKINGLION2019/save_video/"
-#define SAVE_PIC_DIR   "/home/robo/rm2019/engineer_visual/EngineerVision-WAKINGLION2019/EngineerVision-WAKINGLION2019/save_pic/"
+#define SAVE_VIDEO_DIR "/home/maxingpei/engineer_visual/EngineerVision-WAKINGLION2019/EngineerVision-WAKINGLION2019/save_video/"
+#define SAVE_PIC_DIR   "/home/maxingpei/engineer_visual/EngineerVision-WAKINGLION2019/EngineerVision-WAKINGLION2019/save_pic/"
 #endif
 //-----------------------------------【宏定义-键盘指令】--------------------------------------------
 // brief：
